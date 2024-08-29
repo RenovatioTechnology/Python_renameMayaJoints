@@ -1,0 +1,26 @@
+import maya.cmds as cmds
+
+def rename_selected_joints(prefix_to_remove="CurrentName:"):
+    # Get all selected joints
+    selected_joints = cmds.ls(selection=True, type='joint')
+
+    # Check if any joints are selected
+    if not selected_joints:
+        cmds.error("No joints selected. Please select the joints you want to rename.")
+        return
+
+    # Loop through each selected joint
+    for joint in selected_joints:
+        if joint.startswith(prefix_to_remove):
+            # Create new name by removing the prefix
+            new_name = joint[len(prefix_to_remove):]
+
+            try:
+                # Rename the joint
+                cmds.rename(joint, new_name)
+                print('Renamed {} to {}'.format(joint, new_name))
+            except Exception as e:
+                print('Failed to rename {}: {}'.format(joint, str(e)))
+
+# Run the function
+rename_selected_joints()
